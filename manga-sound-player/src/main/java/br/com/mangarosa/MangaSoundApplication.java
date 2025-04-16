@@ -3,6 +3,7 @@ package main.java.br.com.mangarosa;
 import java.util.Scanner;
 
 public class MangaSoundApplication
+
 {
     public static void main( String[] args ) {
 
