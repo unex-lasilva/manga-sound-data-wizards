@@ -1,4 +1,4 @@
-package main.java.br.com.mangarosa.collections;
+package br.com.mangarosa.collections;
 
 public class No {
     private Object valor;
