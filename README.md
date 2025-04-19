@@ -7,6 +7,17 @@ Um par de fone de ouvido, a sua lista de reprodução favorita e pronto: você e
 <img width="552" alt="image" src="https://github.com/user-attachments/assets/9873181b-511f-42d9-8cf5-5d5966515634" />
 
 
-# Equipe: <nome-da-equipe>
-1. <Nome de fulano>
-2. <Nome de fulana>
+# Equipe: Data Wizards
+1. Andrey Mota de Oliveira
+2. Gabriel da Silva e Silva
+3. Hudnei Sued Passos Santana
+4. Louise de Souza Santino
+
+# Avaliação das PRs:
+
+| Avaliador | Andrey  | Gabriel | Hudnei  | Louise  |
+|-----------|---------|---------|---------|---------|
+|  Andrey   | *       | 0       | 0       | 0       |
+|  Gabriel  | 0       | *       | 0       | 0       |
+|  Hudnei   | 0       | 0       | *       | 0       |
+|  Louise   | 0       | 0       | 0       | *       |
