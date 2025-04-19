@@ -1,4 +1,4 @@
-package main.java.br.com.mangarosa;
+package br.com.mangarosa;
 
 public class Musica {
     private String titulo;
@@ -14,7 +14,6 @@ public class Musica {
         this.titulo = titulo;
         this.artista = artista;
         this.path = path;
-
     }
 
     public String getTitulo() {

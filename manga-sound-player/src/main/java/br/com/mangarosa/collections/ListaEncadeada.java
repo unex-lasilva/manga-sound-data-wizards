@@ -24,6 +24,7 @@ package br.com.mangarosa.collections;
  * @version 1.0
  */
 public class ListaEncadeada {
+    private int tamanho = 0;
 
     /**
      * Adiciona um elemento ao final da lista.
@@ -93,8 +94,7 @@ public class ListaEncadeada {
      * @return {@code true} se a lista não contiver elementos, {@code false} caso contrário.
      */
     public boolean isEmpty() {
-        // Implementação
-        return false;
+        return tamanho == 0;
     }
 
     /**

@@ -1,4 +1,4 @@
-package main.java.br.com.mangarosa;
+package br.com.mangarosa;
 
 import java.util.Scanner;
 
@@ -6,6 +6,8 @@ public class MangaSoundApplication
 
 {
     public static void main( String[] args ) {
+        MangaController controller = new MangaController();
+
 
         Scanner scanner = new Scanner(System.in);
         int opcao;
@@ -23,10 +25,24 @@ public class MangaSoundApplication
 
             switch (opcao) {
                 case 1:
-                    // chamar classe/método para adicionar música
+                    System.out.print("Digite o título da música: ");
+                    String tituloMusica = scanner.nextLine();
+
+                    System.out.print("Digite o caminho do arquivo (path): ");
+                    String pathMusica = scanner.nextLine();
+
+                    System.out.print("Digite o nome do artista: ");
+                    String nomeArtista = scanner.nextLine();
+
+                    controller.adicionarMusica(tituloMusica, pathMusica, nomeArtista);
+                    System.out.println("🎶 Música adicionada com sucesso!");
                     break;
                 case 2:
-                    // chamar método para criar lista
+                    System.out.print("Digite o título da nova lista de reprodução: ");
+                    String tituloLista = scanner.nextLine();
+
+                    controller.criarListaReproducao(tituloLista);
+                    System.out.println("📃 Lista de reprodução criada com sucesso!");
                     break;
                 case 3:
                     // chamar método para editar lista
