@@ -8,16 +8,16 @@ Um par de fone de ouvido, a sua lista de reprodução favorita e pronto: você e
 
 
 # Equipe: Data Wizards
-1. Andrey Mota de Oliveira
-2. Gabriel da Silva e Silva
-3. Hudnei Sued Passos Santana
-4. Louise de Souza Santino
+1. Matheus Vinicius Duarte Costa
+2. Ygor Luckas Sousa Ramos
+3. Emanuel dos Santos Amaral Nascimento
+4. Felipe Natan da Silva
 
-# Avaliação das PRs:
+# Avaliação das PRS:
 
-| Avaliador | Andrey  | Gabriel | Hudnei  | Louise  |
+| Avaliador | Matheus Vinicius  | Ygor Luckas | Emanuel Amaral  | Felipe Natan  |
 |-----------|---------|---------|---------|---------|
-|  Andrey   | *       | 0       | 0       | 0       |
-|  Gabriel  | 0       | *       | 0       | 0       |
-|  Hudnei   | 0       | 0       | *       | 0       |
-|  Louise   | 0       | 0       | 0       | *       |
+|  Matheus Vinicius   | *       | 10       | 10       | 10      |
+|  Ygor Luckas  | 10      | *       | 10       | 10     |
+|  Emanuel Amaral   | 10      | 10       | *       | 10       |
+|  Felipe Natan   | 10       | 10       | 10       | *       |
