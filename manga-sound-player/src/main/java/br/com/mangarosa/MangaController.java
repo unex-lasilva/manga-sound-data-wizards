@@ -6,6 +6,7 @@ public class MangaController {
     private ListaEncadeada repositorioMusica;
     private ListaEncadeada listasReproducao;
     private ListaEncadeada artistas;
+    private ReprodutorLista reprodutorLista = new ReprodutorLista();
 
     public MangaController() {
 /**
@@ -166,4 +167,40 @@ public class MangaController {
             System.out.println("Erro ao remover a música.");
         }
     }
-}
+
+    public void reproduzirListaDeReproducao(String tituloLista) {
+        for (int i = 0; i < listasReproducao.size(); i++) {
+            ListaReproducao lista = (ListaReproducao) listasReproducao.get(i);
+            if (lista.getTitulo().equalsIgnoreCase(tituloLista)) {
+                reprodutorLista.setListaReproducao(lista);
+                reprodutorLista.restartLista();
+                return;
+            }
+        }
+        System.out.println("Lista de reprodução não encontrada.");
+    }
+
+    public void pausarMusica() {
+        reprodutorLista.pause();
+    }
+
+    public void executarMusica() {
+        reprodutorLista.play();
+    }
+
+    public void voltarMusica() {
+        reprodutorLista.voltarMusica();
+    }
+
+    public void passarMusica() {
+        reprodutorLista.passarMusica();
+    }
+
+    public void reiniciarLista() {
+        reprodutorLista.restartLista();
+    }
+
+    public void pararLista() {
+        reprodutorLista.stop();
+    }
+    }
