@@ -28,25 +28,16 @@ public class ListaEncadeada {
     private No cabeca;
     private int tamanho = 0;
 
-    private static class No {
-        Object valor;
-        No proximo;
-
-        No(Object valor) {
-            this.valor = valor;
-        }
-    }
-
     public void append(Object value) {
         No novo = new No(value);
         if (cabeca == null) {
             cabeca = novo;
         } else {
             No atual = cabeca;
-            while (atual.proximo != null) {
-                atual = atual.proximo;
+            while (atual.getProx() != null) {
+                atual = atual.getProx();
             }
-            atual.proximo = novo;
+            atual.setProx(novo);
         }
         tamanho++;
     }
@@ -57,13 +48,13 @@ public class ListaEncadeada {
         }
 
         if (position == 0) {
-            cabeca = cabeca.proximo;
+            cabeca = cabeca.getProx();
         } else {
             No anterior = cabeca;
             for (int i = 0; i < position - 1; i++) {
-                anterior = anterior.proximo;
+                anterior = anterior.getProx();
             }
-            anterior.proximo = anterior.proximo.proximo;
+            anterior.setProx(anterior.getProx().getProx());
         }
         tamanho--;
         return true;
@@ -76,22 +67,21 @@ public class ListaEncadeada {
 
         No novo = new No(value);
         if (position == 0) {
-            novo.proximo = cabeca;
+            novo.setProx(cabeca);
             cabeca = novo;
         } else {
             No anterior = cabeca;
             for (int i = 0; i < position - 1; i++) {
-                anterior = anterior.proximo;
+                anterior = anterior.getProx();
             }
-            novo.proximo = anterior.proximo;
-            anterior.proximo = novo;
+            novo.setProx(anterior.getProx());
+            anterior.setProx(novo);
         }
         tamanho++;
     }
 
     public boolean isEmpty() {
         return tamanho == 0;
-
     }
 
     public int size() {
@@ -108,10 +98,10 @@ public class ListaEncadeada {
         No atual = cabeca;
         int index = 0;
         while (atual != null) {
-            if (atual.valor.equals(value)) {
+            if (atual.getValor().equals(value)) {
                 return index;
             }
-            atual = atual.proximo;
+            atual = atual.getProx();
             index++;
         }
         return -1;
@@ -134,8 +124,8 @@ public class ListaEncadeada {
 
         No atual = cabeca;
         for (int i = 0; i < position; i++) {
-            atual = atual.proximo;
+            atual = atual.getProx();
         }
-        return atual.valor;
+        return atual.getValor();
     }
 }

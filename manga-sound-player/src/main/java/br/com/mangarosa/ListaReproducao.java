@@ -27,7 +27,6 @@ public class ListaReproducao {
         return lista.isEmpty();
     }
 
-
     public int tamanho() {
         return lista.size();
     }
