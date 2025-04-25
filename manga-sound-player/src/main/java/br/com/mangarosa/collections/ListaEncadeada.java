@@ -44,7 +44,7 @@ public class ListaEncadeada {
 
     public boolean remove(int position) {
         if (position < 0 || position >= tamanho) {
-            return false;
+            throw new IndexOutOfBoundsException("Posição inválida para remoção.");
         }
 
         if (position == 0) {
@@ -112,6 +112,9 @@ public class ListaEncadeada {
     }
 
     public boolean clear() {
+        if (isEmpty()) {
+            return false;
+        }
         cabeca = null;
         tamanho = 0;
         return true;
