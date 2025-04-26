@@ -10,14 +10,14 @@ Um par de fone de ouvido, a sua lista de reprodução favorita e pronto: você e
 # Equipe: Data Wizards
 1. Andrey Mota de Oliveira
 2. Gabriel da Silva e Silva
-3. Hudnei Sued Passos Santana
-4. Louise de Souza Santino
+3. Louise de Souza Santino
 
 # Avaliação das PRs:
 
-| Avaliador | Andrey  | Gabriel | Hudnei  | Louise  |
-|-----------|---------|---------|---------|---------|
-|  Andrey   | *       | 0       | 0       | 0       |
-|  Gabriel  | 0       | *       | 0       | 0       |
-|  Hudnei   | 0       | 0       | *       | 0       |
-|  Louise   | 0       | 0       | 0       | *       |
+| Avaliador | Andrey  | Gabriel | Louise  |
+|-----------|---------|---------|---------|
+|  Andrey   | *       | 10       | 10       |
+|  Gabriel  | 10       | *       | 10       |
+|  Louise   | 10       | 10       |  *      |
+
+OBS.: Hudnei desistiu de fazer o trabalho, por isso não foi avaliado. Ele apenas aceitou nossos prs quando necessário para que pudéssemos seguir nosso trabalho.
