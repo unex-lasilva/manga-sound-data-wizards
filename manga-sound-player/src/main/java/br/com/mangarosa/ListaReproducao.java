@@ -59,4 +59,8 @@ public class ListaReproducao {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
+    public ListaEncadeada getMusicas() {
+        return lista;
+    }
 }

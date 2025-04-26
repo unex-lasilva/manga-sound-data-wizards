@@ -40,16 +40,32 @@ public class MangaSoundApplication {
                     String copiar = scanner.nextLine();
 
                     if (copiar.equalsIgnoreCase("s")) {
-                        System.out.print("Título da lista a ser copiada: ");
-                        String origem = scanner.nextLine();
-                        ListaReproducao listaOrigem = buscarListaPorTitulo(controller, origem);
-                        if (listaOrigem != null) {
-                            ListaReproducao nova = new ListaReproducao(tituloLista);
-                            nova.criarListaAPartirDe(listaOrigem);
-                            controller.getListasReproducao().append(nova);
-                            System.out.println("Lista criada como cópia.");
-                        } else {
-                            System.out.println("Lista original não encontrada.");
+                        if (controller.getListasReproducao().isEmpty()) {
+                            System.out.println("Não há listas disponíveis para copiar.");
+                            break;
+                        }
+
+                        System.out.println("\nListas disponíveis:");
+                        for (int i = 0; i < controller.getListasReproducao().size(); i++) {
+                            ListaReproducao lista = (ListaReproducao) controller.getListasReproducao().get(i);
+                            System.out.println((i + 1) + ". " + lista.getTitulo());
+                        }
+
+                        System.out.print("Digite o número da lista a ser copiada: ");
+                        try {
+                            int indiceLista = Integer.parseInt(scanner.nextLine()) - 1;
+
+                            if (indiceLista >= 0 && indiceLista < controller.getListasReproducao().size()) {
+                                ListaReproducao listaOrigem = (ListaReproducao) controller.getListasReproducao().get(indiceLista);
+                                ListaReproducao nova = new ListaReproducao(tituloLista);
+                                nova.criarListaAPartirDe(listaOrigem);
+                                controller.getListasReproducao().append(nova);
+                                System.out.println("Lista criada como cópia.");
+                            } else {
+                                System.out.println("Número inválido.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Valor inválido. Digite um número inteiro.");
                         }
                     } else {
                         controller.criarListaReproducao(tituloLista);
@@ -78,131 +94,205 @@ public class MangaSoundApplication {
     }
 
     private static void editarListaMenu(Scanner scanner, MangaController controller) {
-        System.out.print("Título da lista a ser editada: ");
-        String tituloLista = scanner.nextLine();
+        if (controller.getListasReproducao().isEmpty()) {
+            System.out.println("Nenhuma lista de reprodução cadastrada.");
+            return;
+        }
+
+        System.out.println("\n=== Listas de Reprodução ===");
+        for (int i = 0; i < controller.getListasReproducao().size(); i++) {
+            ListaReproducao lista = (ListaReproducao) controller.getListasReproducao().get(i);
+            System.out.println(i + " - " + lista.getTitulo());
+        }
+
+        System.out.print("\nDigite o número da lista que deseja editar: ");
+        int indiceLista;
+        try {
+            indiceLista = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor inválido. Voltando ao menu principal.");
+            return;
+        }
+
+        if (indiceLista < 0 || indiceLista >= controller.getListasReproducao().size()) {
+            System.out.println("Número de lista inválido. Voltando ao menu principal.");
+            return;
+        }
+
+        ListaReproducao listaSelecionada = (ListaReproducao) controller.getListasReproducao().get(indiceLista);
+        String tituloLista = listaSelecionada.getTitulo();
 
         boolean editando = true;
         while (editando) {
-            System.out.println("\n--- Editar Lista ---");
+            System.out.println("\n--- Editar Lista: " + tituloLista + " ---");
             System.out.println("1. Adicionar música");
             System.out.println("2. Adicionar música em posição específica");
-            System.out.println("3. Remover música por título");
-            System.out.println("4. Remover música por posição");
-            System.out.println("5. Verificar se música está na lista");
-            System.out.println("6. Ver posição da música na lista");
-            System.out.println("7. Renomear a lista");
-            System.out.println("8. Limpar lista");
-            System.out.println("9. Excluir lista de reprodução");
-            System.out.println("10. Voltar ao menu principal");
+            System.out.println("3. Remover música");
+            System.out.println("4. Remover música pela posição");
+            System.out.println("5. Renomear lista");
+            System.out.println("6. Limpar lista de reprodução");
+            System.out.println("7. Excluir lista de reprodução");
+            System.out.println("8. Voltar ao menu principal");
             System.out.print("Escolha uma opção: ");
 
             String opcao = scanner.nextLine();
 
             switch (opcao) {
                 case "1":
-                    System.out.print("Título da música: ");
-                    String tituloMusica = scanner.nextLine();
-                    controller.adicionarMusicaListaReproducao(tituloMusica, tituloLista);
+                    if (controller.getRepositorioMusica().isEmpty()) {
+                        System.out.println("Nenhuma música disponível para adicionar.");
+                        break;
+                    }
+                    System.out.println("\n=== Músicas Disponíveis ===");
+                    for (int i = 0; i < controller.getRepositorioMusica().size(); i++) {
+                        Musica musica = (Musica) controller.getRepositorioMusica().get(i);
+                        System.out.println(i + " - " + musica.getTitulo() + " - " + musica.getArtista());
+                    }
+                    System.out.print("\nDigite o número da música que deseja adicionar: ");
+                    try {
+                        int indiceMusica = Integer.parseInt(scanner.nextLine());
+                        if (indiceMusica >= 0 && indiceMusica < controller.getRepositorioMusica().size()) {
+                            Musica musicaAdicionar = (Musica) controller.getRepositorioMusica().get(indiceMusica);
+                            controller.adicionarMusicaListaReproducao(musicaAdicionar.getTitulo(), tituloLista);
+                            System.out.println("Música adicionada com sucesso!");
+                        } else {
+                            System.out.println("Número de música inválido.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Valor inválido.");
+                    }
                     break;
 
                 case "2":
-                    System.out.print("Título da música: ");
-                    String titulo = scanner.nextLine();
-                    System.out.print("Posição: ");
-                    int posicaoAdd;
+                    if (controller.getRepositorioMusica().isEmpty()) {
+                        System.out.println("Nenhuma música disponível para adicionar.");
+                        break;
+                    }
+                    System.out.println("\n=== Músicas Disponíveis ===");
+                    for (int i = 0; i < controller.getRepositorioMusica().size(); i++) {
+                        Musica musica = (Musica) controller.getRepositorioMusica().get(i);
+                        System.out.println((i + 1) + " - " + musica.getTitulo() + " - " + musica.getArtista());
+                    }
+                    System.out.print("\nDigite o número da música que deseja adicionar: ");
                     try {
-                        posicaoAdd = Integer.parseInt(scanner.nextLine());
-                        controller.adicionarMusicaListaReproducaoEmPosicao(titulo, tituloLista, posicaoAdd);
+                        int indiceMusica = Integer.parseInt(scanner.nextLine()) - 1;
+                        System.out.print("Digite a posição para inserir (1-" + (listaSelecionada.tamanho() + 1) + "): ");
+                        int posicao = Integer.parseInt(scanner.nextLine()) - 1;
+
+                        if (indiceMusica >= 0 && indiceMusica < controller.getRepositorioMusica().size()) {
+                            Musica musicaAdicionar = (Musica) controller.getRepositorioMusica().get(indiceMusica);
+
+
+                            int posicaoExistente = listaSelecionada.posicaoDa(musicaAdicionar);
+                            if (posicaoExistente != -1) {
+                                System.out.println("Esta música já está na lista na posição " + (posicaoExistente + 1) +
+                                        ". Deseja movê-la? (s/n)");
+                                String mover = scanner.nextLine();
+                                if (!mover.equalsIgnoreCase("s")) {
+                                    break;
+                                }
+
+                                listaSelecionada.removerMusica(posicaoExistente);
+                                if (posicao > posicaoExistente) {
+                                    posicao--;
+                                }
+                            }
+
+                            controller.adicionarMusicaListaReproducaoEmPosicao(musicaAdicionar.getTitulo(), tituloLista, posicao);
+                            System.out.println("Música adicionada na posição " + (posicao + 1) + " com sucesso!");
+                        } else {
+                            System.out.println("Número de música inválido.");
+                        }
                     } catch (NumberFormatException e) {
-                        System.out.println("Valor inválido. Digite um número inteiro.");
+                        System.out.println("Valor inválido.");
                     }
                     break;
 
                 case "3":
-                    System.out.print("Título da música a remover: ");
-                    String tituloRemover = scanner.nextLine();
-                    controller.removerMusicaListaReproducao(tituloRemover, tituloLista);
+                    if (listaSelecionada.getMusicas().isEmpty()) {
+                        System.out.println("A lista está vazia.");
+                        break;
+                    }
+                    System.out.println("\n=== Músicas na Lista ===");
+                    for (int i = 0; i < listaSelecionada.getMusicas().size(); i++) {
+                        Musica musica = (Musica) listaSelecionada.getMusicas().get(i);
+                        System.out.println(i + " - " + musica.getTitulo() + " - " + musica.getArtista());
+                    }
+                    System.out.print("\nDigite o número da música que deseja remover: ");
+                    try {
+                        int indiceRemover = Integer.parseInt(scanner.nextLine());
+                        if (indiceRemover >= 0 && indiceRemover < listaSelecionada.getMusicas().size()) {
+                            Musica musicaRemover = (Musica) listaSelecionada.getMusicas().get(indiceRemover);
+                            controller.removerMusicaListaReproducao(musicaRemover.getTitulo(), tituloLista);
+                            System.out.println("Música removida com sucesso!");
+                        } else {
+                            System.out.println("Número de música inválido.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Valor inválido.");
+                    }
                     break;
 
                 case "4":
-                    System.out.print("Posição a remover: ");
+                    System.out.print("\nDigite a posição da música que deseja remover: ");
                     try {
                         int posicaoRemover = Integer.parseInt(scanner.nextLine());
                         controller.removerMusicaListaReproducaoEmPosicao(tituloLista, posicaoRemover);
+                        System.out.println("Música removida da posição " + posicaoRemover + " com sucesso!");
                     } catch (NumberFormatException e) {
-                        System.out.println("Valor inválido. Digite um número inteiro.");
+                        System.out.println("Valor inválido.");
                     }
                     break;
 
                 case "5":
-                    System.out.print("Título da música a verificar: ");
-                    String musicaBusca = scanner.nextLine();
-                    Musica musicaVerificada = buscarMusicaPorTitulo(controller, musicaBusca);
-                    ListaReproducao listaVerif = buscarListaPorTitulo(controller, tituloLista);
-                    if (musicaVerificada != null && listaVerif != null) {
-                        boolean contem = listaVerif.contemMusica(musicaVerificada);
-                        System.out.println(contem ? "A música está na lista." : "A música NÃO está na lista.");
+                    System.out.print("Digite o novo nome para a lista: ");
+                    String novoTitulo = scanner.nextLine();
+
+                    if (novoTitulo == null || novoTitulo.trim().isEmpty()) {
+                        System.out.println("O nome não pode ser vazio ou conter apenas espaços!");
+                    } else {
+
+                        boolean nomeExistente = false;
+                        for (int i = 0; i < controller.getListasReproducao().size(); i++) {
+                            ListaReproducao l = (ListaReproducao) controller.getListasReproducao().get(i);
+                            if (l.getTitulo().equalsIgnoreCase(novoTitulo) &&
+                                    !l.getTitulo().equalsIgnoreCase(tituloLista)) {
+                                nomeExistente = true;
+                                break;
+                            }
+                        }
+
+                        if (nomeExistente) {
+                            System.out.println("Já existe uma lista com esse nome!");
+                        } else {
+                            listaSelecionada.setTitulo(novoTitulo.trim());
+                            tituloLista = novoTitulo.trim();
+                            System.out.println("Lista renomeada com sucesso para: " + tituloLista);
+                        }
                     }
                     break;
-
                 case "6":
-                    System.out.print("Título da música para ver posição: ");
-                    String musicaPos = scanner.nextLine();
-                    Musica musicaP = buscarMusicaPorTitulo(controller, musicaPos);
-                    ListaReproducao listaP = buscarListaPorTitulo(controller, tituloLista);
-                    if (musicaP != null && listaP != null) {
-                        int pos = listaP.posicaoDa(musicaP);
-                        if (pos != -1)
-                            System.out.println("A música está na posição: " + pos);
-                        else
-                            System.out.println("Música não está na lista.");
+                    if (listaSelecionada.limparLista()) {
+                        System.out.println("Lista limpa com sucesso!");
+                    } else {
+                        System.out.println("A lista já estava vazia.");
                     }
                     break;
 
                 case "7":
-                    System.out.print("Novo título para a lista: ");
-                    String novoTitulo = scanner.nextLine();
-                    ListaReproducao listaRenomear = buscarListaPorTitulo(controller, tituloLista);
-                    if (listaRenomear != null) {
-                        listaRenomear.setTitulo(novoTitulo);
-                        tituloLista = novoTitulo;
-                        System.out.println("Lista renomeada com sucesso.");
-                    }
-                    break;
-
-                case "8":
-                    ListaReproducao listaLimpar = buscarListaPorTitulo(controller, tituloLista);
-                    if (listaLimpar != null && listaLimpar.limparLista()) {
-                        System.out.println("Lista limpa com sucesso.");
-                    } else {
-                        System.out.println("Erro ao limpar a lista.");
-                    }
-                    break;
-
-                case "9":
                     controller.excluirListaReproducao(tituloLista);
-                    System.out.println("Lista excluída.");
+                    System.out.println("Lista excluída com sucesso!");
                     editando = false;
                     break;
 
-                case "10":
+                case "8":
                     editando = false;
                     break;
 
                 default:
-                    System.out.println("Opção inválida.");
+                    System.out.println("Opção inválida. Tente novamente.");
             }
         }
-    }
-
-    private static Musica buscarMusicaPorTitulo(MangaController controller, String titulo) {
-        for (int i = 0; i < controller.getRepositorioMusica().size(); i++) {
-            Musica m = (Musica) controller.getRepositorioMusica().get(i);
-            if (m.getTitulo().equalsIgnoreCase(titulo)) {
-                return m;
-            }
-        }
-        return null;
     }
 
     private static void executarListaMenu(Scanner scanner, MangaController controller) {
@@ -229,6 +319,7 @@ public class MangaSoundApplication {
             System.out.println("5. Reiniciar música atual");
             System.out.println("6. Reiniciar lista");
             System.out.println("7. ⏹ Parar e voltar ao menu principal");
+            System.out.println("8. ⏹ Parar e voltar ao menu principal");
             System.out.print("Escolha uma opção: ");
 
             String acao = scanner.nextLine();
@@ -261,15 +352,5 @@ public class MangaSoundApplication {
                     System.out.println("Opção inválida. Tente novamente.");
             }
         }
-    }
-
-    private static ListaReproducao buscarListaPorTitulo(MangaController controller, String titulo) {
-        for (int i = 0; i < controller.getListasReproducao().size(); i++) {
-            ListaReproducao l = (ListaReproducao) controller.getListasReproducao().get(i);
-            if (l.getTitulo().equalsIgnoreCase(titulo)) {
-                return l;
-            }
-        }
-        return null;
     }
 }
