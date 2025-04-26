@@ -27,7 +27,6 @@ public class ListaReproducao {
         return lista.isEmpty();
     }
 
-
     public int tamanho() {
         return lista.size();
     }
@@ -59,5 +58,9 @@ public class ListaReproducao {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public ListaEncadeada getMusicas() {
+        return lista;
     }
 }

@@ -1,6 +1,10 @@
 package br.com.mangarosa;
 
 import br.com.mangarosa.collections.ListaEncadeada;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class MangaController {
     private ListaEncadeada repositorioMusica;
@@ -9,20 +13,42 @@ public class MangaController {
     private ReprodutorLista reprodutorLista = new ReprodutorLista();
 
     public MangaController() {
-/**
- * Construtor adicionado pra garantir que os atributos listasReproducao e repositorioMusica
- * (do diagrama) sejam inicializados corretamente.
- * Embora o construtor não esteja explicitamente no diagrama de classes,
- * é necessário para evitar NullPointerException e
- * permitir o funcionamento da aplicação como descrito no enunciado.
- */
+        /**
+         * Construtor adicionado pra garantir que os atributos listasReproducao e repositorioMusica
+         * (do diagrama) sejam inicializados corretamente.
+         * Embora o construtor não esteja explicitamente no diagrama de classes,
+         * é necessário para evitar NullPointerException e
+         * permitir o funcionamento da aplicação como descrito no enunciado.
+         */
         this.repositorioMusica = new ListaEncadeada();
         this.listasReproducao = new ListaEncadeada();
+        this.artistas = new ListaEncadeada();
     }
 
     public void adicionarMusica(String titulo, String path, String nomeArtista){
-        Musica nova = new Musica(titulo, nomeArtista, path);
-        repositorioMusica.append(nova);
+        try {
+            File original = new File(path);
+            if (!original.exists()) {
+                System.out.println("Arquivo original não encontrado: " + path);
+                return;
+            }
+
+            File pastaRepositorio = new File("repositorio");
+            if (!pastaRepositorio.exists()) {
+                pastaRepositorio.mkdir();
+            }
+
+            File destino = new File(pastaRepositorio, original.getName());
+            Files.copy(original.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            Musica nova = new Musica(titulo, nomeArtista, destino.getPath());
+            repositorioMusica.append(nova);
+
+            System.out.println("Música adicionada com sucesso ao repositório!");
+
+        } catch (IOException e) {
+            System.out.println("Erro ao copiar a música: " + e.getMessage());
+        }
     }
 
     public void criarListaReproducao(String titulo) {
@@ -67,8 +93,12 @@ public class MangaController {
             return;
         }
 
-        lista.addMusica(musica);
-        System.out.println("Música adicionada à lista de reprodução.");
+        if (lista.contemMusica(musica)) {
+            System.out.println("A música já está na lista de reprodução.");
+        } else {
+            lista.addMusica(musica);
+            System.out.println("Música adicionada à lista de reprodução.");
+        }
     }
 
     public void adicionarMusicaListaReproducaoEmPosicao(String tituloMusica, String tituloLista, int posicao) {
@@ -172,12 +202,16 @@ public class MangaController {
         for (int i = 0; i < listasReproducao.size(); i++) {
             ListaReproducao lista = (ListaReproducao) listasReproducao.get(i);
             if (lista.getTitulo().equalsIgnoreCase(tituloLista)) {
-                reprodutorLista.setListaReproducao(lista);
+                reprodutorLista = new ReprodutorLista(lista);
                 reprodutorLista.restartLista();
                 return;
             }
         }
         System.out.println("Lista de reprodução não encontrada.");
+    }
+
+    public ReprodutorLista getReprodutorLista() {
+        return reprodutorLista;
     }
 
     public void pausarMusica() {
@@ -196,6 +230,10 @@ public class MangaController {
         reprodutorLista.passarMusica();
     }
 
+    public void reiniciarMusica() {
+        reprodutorLista.restartMusica();
+    }
+
     public void reiniciarLista() {
         reprodutorLista.restartLista();
     }
@@ -203,4 +241,13 @@ public class MangaController {
     public void pararLista() {
         reprodutorLista.stop();
     }
+
+    public ListaEncadeada getRepositorioMusica() {
+        return repositorioMusica;
     }
+
+    public ListaEncadeada getListasReproducao() {
+        return listasReproducao;
+    }
+
+}

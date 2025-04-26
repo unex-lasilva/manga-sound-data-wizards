@@ -24,6 +24,10 @@ public class Musica {
         return duracao;
     }
 
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
+
     public String getPath() {
         return path;
     }
@@ -32,5 +36,3 @@ public class Musica {
         return artista;
     }
 }
-
-

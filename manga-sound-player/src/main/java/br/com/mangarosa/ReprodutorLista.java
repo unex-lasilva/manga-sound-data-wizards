@@ -10,6 +10,12 @@ public class ReprodutorLista {
     private ListaReproducao listaReproducao;
     private int posicaoAtual = 0;
 
+    private String formatarDuracao(int duracao) {
+        int minutos = duracao / 60;
+        int segundos = duracao % 60;
+        return String.format("%02d:%02d", minutos, segundos);
+    }
+
     public ReprodutorLista() {
     }
 
@@ -37,12 +43,22 @@ public class ReprodutorLista {
             File arquivo = new File(musicaAtual.getPath());
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(arquivo);
 
+            AudioFormat format = audioInputStream.getFormat();
+            long frames = audioInputStream.getFrameLength();
+            float frameRate = format.getFrameRate();
+            int duracao = (int) (frames / frameRate);
+            musicaAtual.setDuracao(duracao);
+
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
             status = "tocando";
 
-            System.out.println("Tocando: " + musicaAtual.getTitulo() + " 🎶");
+            System.out.println(" Tocando agora:");
+            System.out.println("Título: " + musicaAtual.getTitulo());
+            System.out.println("Artista: " + musicaAtual.getArtista());
+            System.out.println("Duração: " + formatarDuracao(musicaAtual.getDuracao()));
+            System.out.println("🎶");
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.out.println("Erro ao tocar a música: " + e.getMessage());
@@ -50,15 +66,17 @@ public class ReprodutorLista {
     }
 
     public void pause() {
-        if (clip != null && status.equals("tocando")) {
+        if (clip != null && "tocando".equals(status)) {
             clip.stop();
             status = "pausado";
             System.out.println("Música pausada.");
+        } else {
+            System.out.println("Nenhuma música está tocando para pausar.");
         }
     }
 
     public void restartMusica() {
-        if (clip != null && (status.equals("tocando") || status.equals("pausado"))) {
+        if (clip != null && ("tocando".equals(status) || "pausado".equals(status))) {
             clip.setMicrosecondPosition(0);
             clip.start();
             status = "tocando";
@@ -68,11 +86,12 @@ public class ReprodutorLista {
         }
     }
 
-
     public void stop() {
         if (clip != null) {
-            clip.stop();
-            clip.close();
+            if (clip.isOpen()) {  // Verifica se o clip está aberto
+                clip.stop();
+                clip.close();  // Fecha o clip somente se ele estiver aberto
+            }
             status = "parado";
             System.out.println("Música parada.");
         }
@@ -92,14 +111,14 @@ public class ReprodutorLista {
         if (clip != null && clip.getMicrosecondPosition() > 10_000_000) { // 10 segundos
             clip.setMicrosecondPosition(0);
             clip.start();
-            System.out.println("Reiniciando música...");
+            System.out.println("A música foi reiniciada (passou de 10s).");
         } else {
             stop();
             if (posicaoAtual > 0) {
                 posicaoAtual--;
                 play();
             } else {
-                System.out.println("Você já está na primeira música.");
+                posicaoAtual = 0;
                 play();
             }
         }
